@@ -5,9 +5,6 @@ import seaborn as sns
 import pickle as pkl
 
 if __name__ == '__main__':
-    # Data loading
-    df_head = pd.read_csv('../data/creditcard_2023_head.csv')
-
     # Loading first setup
     with open('../data/setup_1.pkl', 'rb') as f:
         setup1 = pkl.load(f)
