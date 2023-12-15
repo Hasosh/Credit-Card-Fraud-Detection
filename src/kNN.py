@@ -70,19 +70,17 @@ def evaluation(oc_svm, X_test_df, y_test_df):
     y_pred_test = oc_svm.predict(X_test_df)
     # Convert predictions to match y_test labels (0 for anomalies, 1 for normal)
     y_pred_test = (y_pred_test == 1).astype(int)
-    # Convert y_test to dataframe
-    y_pred_test_df = pd.DataFrame(y_pred_test, columns=['Class'])
 
     # Calculate ROC Curve and AUC
-    fpr, tpr, _ = roc_curve(y_test_df, y_pred_test_df)
+    fpr, tpr, _ = roc_curve(y_test_df, y_pred_test)
     roc_auc = auc(fpr, tpr)
 
     # Calculate Precision-Recall Curve and AUC
-    precision, recall, _ = precision_recall_curve(y_test_df, y_pred_test_df)
+    precision, recall, _ = precision_recall_curve(y_test_df, y_pred_test)
     pr_auc = auc(recall, precision)
 
     # Generate a classification report
-    class_report = classification_report(y_test_df, y_pred_test_df)
+    class_report = classification_report(y_test_df, y_pred_test)
 
     # Plotting the ROC and Precision-Recall Curves
     plt.figure(figsize=(12, 5))
