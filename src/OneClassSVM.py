@@ -36,7 +36,7 @@ import torch.optim as optim
 # from pyod.models.ocsvm import OCSVM
 from sklearn.ensemble import IsolationForest
 from sklearn.svm import OneClassSVM
-from sklearn.neighbors import (LocalOutlierFactor, NearestNeighbors)
+from sklearn.neighbors import (LocalOutlierFactor, NearestNeighbors, KNeighborsClassifier)
 
 
 def setup():
@@ -60,34 +60,34 @@ def setup():
     X_train_scaled_df = pd.DataFrame(X_train_scaled[:, 1:], columns=columns)  # Excluding 'id'
     X_test_scaled_df = pd.DataFrame(X_test_scaled[:, 1:], columns=columns)  # Excluding 'id'
 
-    y_test_df = pd.DataFrame(y_test, columns=['Class'])
-    return X_train_scaled_df, X_test_scaled_df, y_test_df
+    return X_train_scaled_df, X_test_scaled_df, y_test
 
 def model_training(X_train_scaled_df):
     X_train_scaled_df_mini = X_train_scaled_df[:10000] # Prototyping with only 10000 instances.
     # Timing and Training the One-Class SVM model
     start_time = time.time()
+    model_name = str('One-Class SVM')
     model = OneClassSVM().fit(X_train_scaled_df_mini)
     duration = time.time() - start_time
     print(f"Training time: {duration:.2f} seconds")
-    return model
+    return model, model_name
 
-def evaluation(model, X_test_scaled_df, y_test_df):
+def evaluation(model, X_test_scaled_df, y_test, model_name):
     # Predict on the test set
     y_pred_test = model.predict(X_test_scaled_df)
     # Convert predictions to match y_test labels (0 for anomalies, 1 for normal)
     y_pred_test = (y_pred_test == 1).astype(int)
 
     # Calculate ROC Curve and AUC
-    fpr, tpr, _ = roc_curve(y_test_df, y_pred_test)
+    fpr, tpr, _ = roc_curve(y_test, y_pred_test)
     roc_auc = auc(fpr, tpr)
 
     # Calculate Precision-Recall Curve and AUC
-    precision, recall, _ = precision_recall_curve(y_test_df, y_pred_test)
+    precision, recall, _ = precision_recall_curve(y_test, y_pred_test)
     pr_auc = auc(recall, precision)
 
     # Generate a classification report
-    class_report = classification_report(y_test_df, y_pred_test)
+    class_report = classification_report(y_test, y_pred_test)
 
     # Plotting the ROC and Precision-Recall Curves
     plt.figure(figsize=(12, 5))
@@ -97,14 +97,14 @@ def evaluation(model, X_test_scaled_df, y_test_df):
     plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (OCSVM)')
+    plt.title('Receiver Operating Characteristic ' + model_name)
     plt.legend(loc="lower right")
 
     plt.subplot(1, 2, 2)
     plt.plot(recall, precision, color='blue', lw=2, label=f'PR curve (area = {pr_auc:.2f})')
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    plt.title('Precision-Recall curve (OCSVM)')
+    plt.title('Precision-Recall curve ' + model_name)
     plt.legend(loc="upper right")
 
     plt.tight_layout()
@@ -113,6 +113,6 @@ def evaluation(model, X_test_scaled_df, y_test_df):
     print(class_report)
 
 if __name__ == '__main__':
-    X_train_scaled_df, X_test_scaled_df, y_test_df = setup()
-    model = model_training(X_train_scaled_df)
-    evaluation(model, X_test_scaled_df, y_test_df)
+    X_train_scaled_df, X_test_scaled_df, y_test = setup()
+    model, model_name = model_training(X_train_scaled_df)
+    evaluation(model, X_test_scaled_df, y_test, model_name)

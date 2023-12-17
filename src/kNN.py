@@ -66,12 +66,13 @@ def model_training(X_train_scaled_df):
     X_train_scaled_df_mini = X_train_scaled_df[:10000] # Prototyping with only 10000 instances.
     # Timing and Training the One-Class SVM model
     start_time = time.time()
+    model_name = 'One-Class SVM'
     model = OneClassSVM().fit(X_train_scaled_df_mini)
     duration = time.time() - start_time
     print(f"Training time: {duration:.2f} seconds")
-    return model
+    return model, model_name
 
-def evaluation(model, X_test_scaled_df, y_test):
+def evaluation(model, X_test_scaled_df, y_test, model_name):
     # Predict on the test set
     y_pred_test = model.predict(X_test_scaled_df)
     # Convert predictions to match y_test labels (0 for anomalies, 1 for normal)
@@ -96,14 +97,14 @@ def evaluation(model, X_test_scaled_df, y_test):
     plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (OCSVM)')
+    plt.title('Receiver Operating Characteristic ' + model_name)
     plt.legend(loc="lower right")
 
     plt.subplot(1, 2, 2)
     plt.plot(recall, precision, color='blue', lw=2, label=f'PR curve (area = {pr_auc:.2f})')
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    plt.title('Precision-Recall curve (OCSVM)')
+    plt.title('Precision-Recall curve ' + model_name)
     plt.legend(loc="upper right")
 
     plt.tight_layout()
@@ -113,5 +114,5 @@ def evaluation(model, X_test_scaled_df, y_test):
 
 if __name__ == '__main__':
     X_train_scaled_df, X_test_scaled_df, y_test = setup()
-    model = model_training(X_train_scaled_df)
-    evaluation(model, X_test_scaled_df, y_test)
+    model, model_name = model_training(X_train_scaled_df)
+    evaluation(model, X_test_scaled_df, y_test, model_name)
