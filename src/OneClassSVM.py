@@ -12,7 +12,7 @@ import pickle as pkl
 
 #%%
 # ML
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, KFold
 from sklearn.metrics import (
     f1_score,
     confusion_matrix,
@@ -25,6 +25,8 @@ from sklearn.metrics import (
     roc_curve,
     auc
 )
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, Normalizer
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -34,8 +36,7 @@ import torch.optim as optim
 # from pyod.models.ocsvm import OCSVM
 from sklearn.ensemble import IsolationForest
 from sklearn.svm import OneClassSVM
-from sklearn.neighbors import LocalOutlierFactor
-
+from sklearn.neighbors import (LocalOutlierFactor, NearestNeighbors)
 
 
 def setup():
@@ -48,41 +49,45 @@ def setup():
 
     X_train, _, X_test, y_test = setup1['X_train'], setup1['y_train'], setup1['X_test'], setup1['y_test']
 
+    # Todo: Try Different Scalers
+    scaler = MinMaxScaler().fit(X_train)  # Initialize the MinMaxScaler and fit to the training set
+    X_train_scaled = scaler.transform(X_train)  # the scaler is applied to the training set
+    X_test_scaled = scaler.transform(X_test)  # the scaler is applied to the test set
+
     # Convert everything to DataFrame
     # Assuming the first column is 'id' and the last column is 'amount'
-    columns = ['Feature_' + str(i) for i in range(1, X_train.shape[1]-1)] + ['Amount']
-    X_train_df = pd.DataFrame(X_train[:, 1:], columns=columns)  # Excluding 'id'
-    X_test_df = pd.DataFrame(X_test[:, 1:], columns=columns)  # Excluding 'id'
-    y_test_df = pd.DataFrame(y_test, columns=['Class'])
-    return X_train_df, X_test_df, y_test_df
+    columns = ['Feature_' + str(i) for i in range(1, X_train_scaled.shape[1] - 1)] + ['Amount']
+    X_train_scaled_df = pd.DataFrame(X_train_scaled[:, 1:], columns=columns)  # Excluding 'id'
+    X_test_scaled_df = pd.DataFrame(X_test_scaled[:, 1:], columns=columns)  # Excluding 'id'
 
-def model_training(X_train_df):
-    X_train_df_mini = X_train_df[:10000] # Prototyping with only 10000 instances.
+    y_test_df = pd.DataFrame(y_test, columns=['Class'])
+    return X_train_scaled_df, X_test_scaled_df, y_test_df
+
+def model_training(X_train_scaled_df):
+    X_train_scaled_df_mini = X_train_scaled_df[:10000] # Prototyping with only 10000 instances.
     # Timing and Training the One-Class SVM model
     start_time = time.time()
-    oc_svm = OneClassSVM().fit(X_train_df_mini)
-    oc_svm_duration = time.time() - start_time
-    print(f"One-Class SVM training time: {oc_svm_duration:.2f} seconds")
-    return oc_svm
+    model = OneClassSVM().fit(X_train_scaled_df_mini)
+    duration = time.time() - start_time
+    print(f"Training time: {duration:.2f} seconds")
+    return model
 
-def evaluation(oc_svm, X_test_df, y_test_df):
+def evaluation(model, X_test_scaled_df, y_test_df):
     # Predict on the test set
-    y_pred_test = oc_svm.predict(X_test_df)
+    y_pred_test = model.predict(X_test_scaled_df)
     # Convert predictions to match y_test labels (0 for anomalies, 1 for normal)
     y_pred_test = (y_pred_test == 1).astype(int)
-    # Convert y_test to dataframe
-    y_pred_test_df = pd.DataFrame(y_pred_test, columns=['Class'])
 
     # Calculate ROC Curve and AUC
-    fpr, tpr, _ = roc_curve(y_test_df, y_pred_test_df)
+    fpr, tpr, _ = roc_curve(y_test_df, y_pred_test)
     roc_auc = auc(fpr, tpr)
 
     # Calculate Precision-Recall Curve and AUC
-    precision, recall, _ = precision_recall_curve(y_test_df, y_pred_test_df)
+    precision, recall, _ = precision_recall_curve(y_test_df, y_pred_test)
     pr_auc = auc(recall, precision)
 
     # Generate a classification report
-    class_report = classification_report(y_test_df, y_pred_test_df)
+    class_report = classification_report(y_test_df, y_pred_test)
 
     # Plotting the ROC and Precision-Recall Curves
     plt.figure(figsize=(12, 5))
@@ -108,6 +113,6 @@ def evaluation(oc_svm, X_test_df, y_test_df):
     print(class_report)
 
 if __name__ == '__main__':
-    X_train_df, X_test_df, y_test_df = setup()
-    oc_svm = model_training(X_train_df)
-    evaluation(oc_svm, X_test_df, y_test_df)
+    X_train_scaled_df, X_test_scaled_df, y_test_df = setup()
+    model = model_training(X_train_scaled_df)
+    evaluation(model, X_test_scaled_df, y_test_df)
