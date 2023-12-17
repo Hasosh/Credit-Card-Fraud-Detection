@@ -60,8 +60,7 @@ def setup():
     X_train_scaled_df = pd.DataFrame(X_train_scaled[:, 1:], columns=columns)  # Excluding 'id'
     X_test_scaled_df = pd.DataFrame(X_test_scaled[:, 1:], columns=columns)  # Excluding 'id'
 
-    y_test_df = pd.DataFrame(y_test, columns=['Class'])
-    return X_train_scaled_df, X_test_scaled_df, y_test_df
+    return X_train_scaled_df, X_test_scaled_df, y_test
 
 def model_training(X_train_scaled_df):
     X_train_scaled_df_mini = X_train_scaled_df[:10000] # Prototyping with only 10000 instances.
@@ -72,22 +71,22 @@ def model_training(X_train_scaled_df):
     print(f"Training time: {duration:.2f} seconds")
     return model
 
-def evaluation(model, X_test_scaled_df, y_test_df):
+def evaluation(model, X_test_scaled_df, y_test):
     # Predict on the test set
     y_pred_test = model.predict(X_test_scaled_df)
     # Convert predictions to match y_test labels (0 for anomalies, 1 for normal)
     y_pred_test = (y_pred_test == 1).astype(int)
 
     # Calculate ROC Curve and AUC
-    fpr, tpr, _ = roc_curve(y_test_df, y_pred_test)
+    fpr, tpr, _ = roc_curve(y_test, y_pred_test)
     roc_auc = auc(fpr, tpr)
 
     # Calculate Precision-Recall Curve and AUC
-    precision, recall, _ = precision_recall_curve(y_test_df, y_pred_test)
+    precision, recall, _ = precision_recall_curve(y_test, y_pred_test)
     pr_auc = auc(recall, precision)
 
     # Generate a classification report
-    class_report = classification_report(y_test_df, y_pred_test)
+    class_report = classification_report(y_test, y_pred_test)
 
     # Plotting the ROC and Precision-Recall Curves
     plt.figure(figsize=(12, 5))
@@ -113,6 +112,6 @@ def evaluation(model, X_test_scaled_df, y_test_df):
     print(class_report)
 
 if __name__ == '__main__':
-    X_train_scaled_df, X_test_scaled_df, y_test_df = setup()
+    X_train_scaled_df, X_test_scaled_df, y_test = setup()
     model = model_training(X_train_scaled_df)
-    evaluation(model, X_test_scaled_df, y_test_df)
+    evaluation(model, X_test_scaled_df, y_test)
