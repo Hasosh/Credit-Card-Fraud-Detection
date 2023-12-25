@@ -40,6 +40,7 @@ from sklearn.neighbors import (LocalOutlierFactor, NearestNeighbors, KNeighborsC
 
 
 def setup():
+    print("Beginning Data Loading...")
     # Data Loading: first setup
     with open('../data/setup_1.pkl', 'rb') as f:
         setup1 = pkl.load(f)
@@ -55,19 +56,23 @@ def setup():
     X_test_without_id_scaled = scaler.transform(X_test_without_id)  # the scaler is applied to the test set
 
     X_train_without_id_scaled_mini = X_test_without_id_scaled[:10000]  # Prototyping with only 10000 instances.
+    print("Data Loading finished.")
 
     return X_train_without_id_scaled_mini, X_test_without_id_scaled, y_test
 
 def model_training(X_train_without_id_scaled):
+    print("Beginning model training...")
     # Timing and Training the model
     start_time = time.time()
     model_name = 'One-Class SVM'
     model = OneClassSVM().fit(X_train_without_id_scaled)
     duration = time.time() - start_time
     print(f"Training time: {duration:.2f} seconds")
+    print("Model training finished.")
     return model, model_name
 
 def evaluation(model, X_test_scaled_df, y_test, model_name):
+    print("Beginning evaluation...")
     # Predict on the test set
     y_pred_test = model.predict(X_test_scaled_df)
     # Convert predictions to match y_test labels (0 for anomalies, 1 for normal)
@@ -106,8 +111,12 @@ def evaluation(model, X_test_scaled_df, y_test, model_name):
     plt.show()
 
     print(class_report)
+    print("Evaluation finished.")
 
-if __name__ == '__main__':
+def main():
     X_train_without_id_scaled, X_test_without_id_scaled, y_test = setup()
     model, model_name = model_training(X_train_without_id_scaled)
     evaluation(model, X_test_without_id_scaled, y_test, model_name)
+
+if __name__ == '__main__':
+    main()
