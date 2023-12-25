@@ -36,38 +36,33 @@ import torch.optim as optim
 # from pyod.models.ocsvm import OCSVM
 from sklearn.ensemble import IsolationForest
 from sklearn.svm import OneClassSVM
-from sklearn.neighbors import (LocalOutlierFactor, NearestNeighbors)
+from sklearn.neighbors import (LocalOutlierFactor, NearestNeighbors, KNeighborsClassifier)
 
 
 def setup():
-    # Data loading
-    df_head = pd.read_csv('../data/creditcard_2023_head.csv')
-
-    # Loading first setup
+    # Data Loading: first setup
     with open('../data/setup_1.pkl', 'rb') as f:
         setup1 = pkl.load(f)
 
     X_train, _, X_test, y_test = setup1['X_train'], setup1['y_train'], setup1['X_test'], setup1['y_test']
 
+    X_train_without_id = X_train[:, 1:]  # Excluding 'id'
+    X_test_without_id = X_test[:, 1:]  # Excluding 'id'
+
     # Todo: Try Different Scalers
-    scaler = MinMaxScaler().fit(X_train)  # Initialize the MinMaxScaler and fit to the training set
-    X_train_scaled = scaler.transform(X_train)  # the scaler is applied to the training set
-    X_test_scaled = scaler.transform(X_test)  # the scaler is applied to the test set
+    scaler = MinMaxScaler().fit(X_train_without_id)  # Initialize the MinMaxScaler and fit to the training set
+    X_train_without_id_scaled = scaler.transform(X_train_without_id)  # the scaler is applied to the training set
+    X_test_without_id_scaled = scaler.transform(X_test_without_id)  # the scaler is applied to the test set
 
-    # Convert everything to DataFrame
-    # Assuming the first column is 'id' and the last column is 'amount'
-    columns = ['Feature_' + str(i) for i in range(1, X_train_scaled.shape[1] - 1)] + ['Amount']
-    X_train_scaled_df = pd.DataFrame(X_train_scaled[:, 1:], columns=columns)  # Excluding 'id'
-    X_test_scaled_df = pd.DataFrame(X_test_scaled[:, 1:], columns=columns)  # Excluding 'id'
+    X_train_without_id_scaled_mini = X_test_without_id_scaled[:10000]  # Prototyping with only 10000 instances.
 
-    return X_train_scaled_df, X_test_scaled_df, y_test
+    return X_train_without_id_scaled_mini, X_test_without_id_scaled, y_test
 
-def model_training(X_train_scaled_df):
-    X_train_scaled_df_mini = X_train_scaled_df[:10000] # Prototyping with only 10000 instances.
-    # Timing and Training the One-Class SVM model
+def model_training(X_train_without_id_scaled):
+    # Timing and Training the model
     start_time = time.time()
     model_name = 'One-Class SVM'
-    model = OneClassSVM().fit(X_train_scaled_df_mini)
+    model = OneClassSVM().fit(X_train_without_id_scaled)
     duration = time.time() - start_time
     print(f"Training time: {duration:.2f} seconds")
     return model, model_name
@@ -113,6 +108,6 @@ def evaluation(model, X_test_scaled_df, y_test, model_name):
     print(class_report)
 
 if __name__ == '__main__':
-    X_train_scaled_df, X_test_scaled_df, y_test = setup()
-    model, model_name = model_training(X_train_scaled_df)
-    evaluation(model, X_test_scaled_df, y_test, model_name)
+    X_train_without_id_scaled, X_test_without_id_scaled, y_test = setup()
+    model, model_name = model_training(X_train_without_id_scaled)
+    evaluation(model, X_test_without_id_scaled, y_test, model_name)
