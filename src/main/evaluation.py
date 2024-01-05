@@ -12,9 +12,10 @@ from sklearn.metrics import (
 )
 
 class ModelEvaluator:
-    def __init__(self, y_true, y_pred):
+    def __init__(self, y_true, y_pred, y_scores=None):
         self.y_true = y_true
         self.y_pred = y_pred
+        self.y_scores = y_scores
 
     def basic_evaluation(self):
         precision = precision_score(self.y_true, self.y_pred)
@@ -29,7 +30,7 @@ class ModelEvaluator:
         print(f"AUC-ROC: {roc_auc}")
 
     def plot_roc_curve(self):
-        fpr, tpr, _ = roc_curve(self.y_true, self.y_pred)
+        fpr, tpr, _ = roc_curve(self.y_true, self.y_scores)
         roc_auc = auc(fpr, tpr)
 
         plt.figure(figsize=(6, 6))
@@ -42,7 +43,7 @@ class ModelEvaluator:
         plt.show()
 
     def plot_precision_recall_curve(self):
-        precision, recall, _ = precision_recall_curve(self.y_true, self.y_pred)
+        precision, recall, _ = precision_recall_curve(self.y_true, self.y_scores)
         pr_auc = auc(recall, precision)
 
         plt.figure(figsize=(6, 6))
@@ -53,8 +54,9 @@ class ModelEvaluator:
         plt.legend(loc="upper right")
         plt.show()
 
-    def full_report(self):
+    def full_report(self, y_scores=None):
         self.basic_evaluation()
-        self.plot_roc_curve()
-        self.plot_precision_recall_curve()
+        if self.y_scores is not None:
+            self.plot_roc_curve()
+            self.plot_precision_recall_curve()
         print(classification_report(self.y_true, self.y_pred))

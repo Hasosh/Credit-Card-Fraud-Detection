@@ -47,6 +47,9 @@ class OCSVM:
 
     def predict(self, X):
         return self.model.predict(X)
+    
+    def anomaly_scores(self, X):
+        return self.model.score_samples(X)
 
 
 class SGDOCSVM:
@@ -58,6 +61,9 @@ class SGDOCSVM:
 
     def predict(self, X):
         return self.model.predict(X)
+    
+    def anomaly_scores(self, X):
+        return self.model.score_samples(X)
 
 
 class KNNAnomalyDetector:
@@ -75,7 +81,8 @@ class KNNAnomalyDetector:
 
     def predict(self, X):
         distances, _ = self.model.kneighbors(X)
-        return (distances[:, self.n_neighbors - 1] > self.threshold).astype(int)
+        y_pred = (distances[:, self.n_neighbors - 1] > self.threshold).astype(int)
+        return y_pred, distances[:, self.n_neighbors - 1]
 
 
 class LOFAnomalyDetector:
@@ -96,4 +103,7 @@ class IsolationForestDetector:
 
     def predict(self, X):
         return self.model.predict(X)
+    
+    def anomaly_scores(self, X):
+        return self.model.score_samples(X)
 
