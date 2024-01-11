@@ -3,12 +3,12 @@ import pandas as pd
 import pickle as pkl
 from sklearn.preprocessing import StandardScaler
 
-class DataLoader:
-    def __init__(self, filepath):
-        self.filepath = filepath
+class MyDataLoader:
+    def __init__(self):
+        pass
 
-    def load_head(self):
-        df_head = pd.read_csv(self.filepath)
+    def load_head(self, filepath):
+        df_head = pd.read_csv(filepath)
         return df_head
 
     def load_setup(self, setup_path):
