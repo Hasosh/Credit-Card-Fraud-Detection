@@ -69,7 +69,7 @@ val_dataset = TensorDataset(X_val_tensor, X_val_tensor)
 val_loader = DataLoader(dataset=val_dataset, batch_size=Config.BATCH_SIZE)
 
 # Create model
-if Config.MODEL_TYPE == 'Autoencoder':
+if Config.MODEL_TYPE == 'Autoencoder' or Config.MODEL_TYPE == 'DenoisingAE':
     model = Autoencoder(input_dim=X_train_.shape[1],
                         num_layers=Config.NUM_LAYERS,
                         bottleneck_size=Config.BOTTLENECK_SIZE,
@@ -92,6 +92,10 @@ elif Config.LOSS_FUNCTION == 'MSE':
 # Optimizer
 optimizer = optim.Adam(model.parameters(), lr=Config.LEARNING_RATE)
 
+def add_noise(inputs, noise_factor=0.5): # only needed for denoising autoencoder
+    noise = torch.randn_like(inputs) * noise_factor
+    return inputs + noise
+
 # Training loop
 best_loss = float('inf')
 counter = 0
@@ -101,9 +105,16 @@ for epoch in range(Config.EPOCHS):
     train_loss = 0.0
     for data in train_loader:
         inputs, targets = data
-        inputs, targets = inputs.to(device), targets.to(device)  # Move data to the same device as the model
         optimizer.zero_grad()
-        outputs = model(inputs)
+
+        if Config.MODEL_TYPE == 'DenoisingAE':
+            noisy_inputs = add_noise(inputs, noise_factor=Config.NOISE_FACTOR)
+            noisy_inputs, targets = noisy_inputs.to(device), targets.to(device) 
+            outputs = model(noisy_inputs)
+        else:
+            inputs, targets = inputs.to(device), targets.to(device)  # Move data to the same device as the model
+            outputs = model(inputs)
+
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
@@ -163,7 +174,10 @@ ax.hist(fraud[fraud <= Config.PLOT_CLIPPING_VALUE], bins=50, density=True, label
 plt.title("(Normalized) Distribution of the Reconstruction Loss")
 plt.xlabel("Reconstruction error")
 plt.legend()
-plt.show()
+#plt.show()
+
+# Log the plot to wandb
+wandb.log({"Reconstruction Loss Distribution": wandb.Image(fig)})
 
 def get_best_threshold(y_true, reconstruction_losses):
     best_f1 = 0
@@ -200,7 +214,8 @@ y_pred = y_pred.astype(int)
 
 # compute metrics
 evaluator = ModelEvaluator(y_test, y_pred, mse)
-metrics = evaluator.full_report()
+metrics = evaluator.basic_report()
+#metrics = evaluator.full_report()
 wandb.log(metrics)
 
 # Save and upload the model

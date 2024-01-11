@@ -20,7 +20,7 @@ class ModelEvaluator:
         self.y_pred = y_pred
         self.y_scores = y_scores
 
-    def basic_evaluation(self):
+    def basic_report(self):
         precision = precision_score(self.y_true, self.y_pred)
         recall = recall_score(self.y_true, self.y_pred)
         f1 = f1_score(self.y_true, self.y_pred)

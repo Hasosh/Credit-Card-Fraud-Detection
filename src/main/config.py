@@ -6,11 +6,12 @@ class Config:
     BATCH_SIZE = 256
     EPOCHS = 100
     LEARNING_RATE = 0.001
-    MODEL_TYPE = 'Autoencoder'  # Options: 'Autoencoder', 'VariationalAutoencoder'
-    NUM_LAYERS = 6  # Total number of layers in Autoencoder
+    MODEL_TYPE = 'DenoisingAE'  # Options: 'Autoencoder', 'DenoisingAE'
+    NUM_LAYERS = 4  # Total number of layers in Autoencoder (must be even number!)
     BOTTLENECK_SIZE = 4
     ACTIVATION_FUNC = 'ELU'  # Options: 'ReLU', 'ELU', 'Tanh'
     PATIENCE = 10
-    MIN_DELTA = 0.001
+    MIN_DELTA = 0.01
     LOSS_FUNCTION = 'MSE'  # Options: 'BCE', 'MSE'
     PLOT_CLIPPING_VALUE = 10 # Good Options: 0.05 (BCE) or 10 (MSE)
+    NOISE_FACTOR = 0.5 # For DenoisingAE
