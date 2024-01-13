@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad91706-dc77-45e4-b687-f688f949aec5" name="Changes" comment="" />
+    <list default="true" id="dad91706-dc77-45e4-b687-f688f949aec5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/creditcard_2023_head.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/creditcard_2023_head.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/.ipynb_checkpoints/exploratory_data_analysis-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/.ipynb_checkpoints/exploratory_data_analysis-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/exploratory_data_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/exploratory_data_analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataAnalysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/train.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,7 +51,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Zeyad/Documents/Career/2_University/Master/Semesterübersicht/Semester_3/AISA/AISA_Study_Project/Automated-clustering-of-small-molecules"
+    "last_opened_file_path": "C:/Users/Zeyad/Documents/Career/2_University/Master/Semesterübersicht/Semester_3/Deep_Learning_Lab/Project/Credit-Card-Fraud-Detection"
   }
 }]]></component>
   <component name="RunManager" selected="Python.Main">

@@ -14,9 +14,10 @@ class MyDataLoader:
     def load_setup(self, setup_path):
         with open(setup_path, 'rb') as f:
             return pkl.load(f)
-        
-    def transform_data(self, X, is_train=False):
-        if is_train:
-            self.scaler = StandardScaler().fit(X[:, -1].reshape(-1, 1))
+
+    def fit_data(self, X):
+        self.scaler = StandardScaler().fit(X[:, -1].reshape(-1, 1))
+
+    def transform_data(self, X):
         X[:, -1] = self.scaler.transform(X[:, -1].reshape(-1, 1)).flatten()
         return X[:, 1:]  # Exclude 'id' column

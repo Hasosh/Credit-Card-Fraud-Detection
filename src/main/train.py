@@ -37,15 +37,16 @@ torch.manual_seed(Config.RANDOM_SEED)
 
 # Load data
 loader = MyDataLoader()
-setup1 = loader.load_setup(Config.DATA_PATH)
+setup = loader.load_setup(Config.DATA_PATH)
 
-X_train = loader.transform_data(setup1['X_train'], is_train=True)
-X_test = loader.transform_data(setup1['X_test'], is_train=False)
+loader.fit_data(setup['X_train'])
+X_train = loader.transform_data(setup['X_train'])
+X_test = loader.transform_data(setup['X_test'])
 
 print("Training Data Shape:", X_train.shape)
 print("Testing Data Shape:", X_test.shape)
 
-y_test = setup1['y_test']
+y_test = setup['y_test']
 
 print("Testing Labels Data Shape:", y_test.shape)
 
@@ -108,12 +109,10 @@ for epoch in range(Config.EPOCHS):
         optimizer.zero_grad()
 
         if Config.MODEL_TYPE == 'DenoisingAE':
-            noisy_inputs = add_noise(inputs, noise_factor=Config.NOISE_FACTOR)
-            noisy_inputs, targets = noisy_inputs.to(device), targets.to(device) 
-            outputs = model(noisy_inputs)
-        else:
-            inputs, targets = inputs.to(device), targets.to(device)  # Move data to the same device as the model
-            outputs = model(inputs)
+            inputs = add_noise(inputs, noise_factor=Config.NOISE_FACTOR)
+
+        inputs, targets = inputs.to(device), targets.to(device)  # Move data to the same device as the model
+        outputs = model(inputs)
 
         loss = criterion(outputs, targets)
         loss.backward()
