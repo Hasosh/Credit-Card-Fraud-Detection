@@ -78,8 +78,8 @@ class ModelEvaluator:
         plt.legend(loc="upper right")
         plt.show()
 
-    def full_report(self, y_scores=None):
-        metrics = self.basic_evaluation()
+    def full_report(self):
+        metrics = self.basic_report()
         self.plot_confusion_matrix()
         if self.y_scores is not None:
             self.plot_roc_curve()

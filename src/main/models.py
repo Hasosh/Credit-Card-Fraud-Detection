@@ -94,7 +94,7 @@ class LOFAnomalyDetector:
 
 
 class IsolationForestDetector:
-    def __init__(self, n_estimators=100, max_samples='auto', contamination='auto', random_state=42):
+    def __init__(self, n_estimators=100, max_samples='auto', contamination='auto', random_state=0):
         self.model = IsolationForest(n_estimators=n_estimators, max_samples=max_samples, 
                                      contamination=contamination, random_state=random_state)
 

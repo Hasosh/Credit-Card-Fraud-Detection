@@ -35,7 +35,7 @@ wandb.init(project="dl-lab", entity="hasan-evci", config={
 np.random.seed(Config.RANDOM_SEED)
 torch.manual_seed(Config.RANDOM_SEED)
 
-# Load data
+#### Load data
 loader = MyDataLoader()
 setup = loader.load_setup(Config.DATA_PATH)
 
@@ -97,7 +97,7 @@ def add_noise(inputs, noise_factor=0.5): # only needed for denoising autoencoder
     noise = torch.randn_like(inputs) * noise_factor
     return inputs + noise
 
-# Training loop
+#### Training loop
 best_loss = float('inf')
 counter = 0
 for epoch in range(Config.EPOCHS):
@@ -150,8 +150,25 @@ for epoch in range(Config.EPOCHS):
         print(f'Early stopping triggered after {epoch + 1} epochs')
         break
 
-# Evaluation
+#### Find thresholds
     
+X_train_tensor = X_train_tensor.to(device)
+
+# Get the model's reconstruction of the test set
+model.eval()
+with torch.no_grad():
+    reconstructions = model(X_train_tensor).cpu().numpy()
+
+# Calculate the MSE reconstruction loss per row
+train_mse = np.mean(np.power(X_train_tensor.cpu().numpy() - reconstructions, 2), axis=1)
+
+threshold1 = np.quantile(train_mse, 0.90)
+threshold2 = np.quantile(train_mse, 0.95)
+threshold3 = np.quantile(train_mse, 0.99)
+threshold4 = np.mean(train_mse) + np.std(train_mse)
+
+#### Evaluation
+     
 # Convert the transformed test set to a PyTorch tensor
 X_test_tensor = torch.Tensor(X_test).to(device)
 
@@ -161,7 +178,7 @@ with torch.no_grad():
     reconstructions = model(X_test_tensor).cpu().numpy()
 
 # Calculate the MSE reconstruction loss per row
-mse = np.mean(np.power(X_test - reconstructions, 2), axis=1)
+mse = np.mean(np.power(X_test_tensor.cpu().numpy() - reconstructions, 2), axis=1)
 
 clean = mse[y_test == 0]
 fraud = mse[y_test == 1]
@@ -201,21 +218,26 @@ def get_best_threshold(y_true, reconstruction_losses):
 
     return best_threshold
 
-threshold = get_best_threshold(y_test, mse)
+threshold5 = get_best_threshold(y_test, mse) # for comparison
 
-outliers = mse > threshold
-print("Number of outliers: ", sum(outliers))
+def full_evaluation(mse, threshold):
+    outliers = mse > threshold
+    print("Number of outliers: ", sum(outliers))
 
-y_pred = outliers
+    # Convert predictions to match y_test labels (1 for anomalies, 0 for normal)
+    y_pred = outliers.astype(int)
 
-# Convert predictions to match y_test labels (1 for anomalies, 0 for normal)
-y_pred = y_pred.astype(int)
+    # compute metrics
+    evaluator = ModelEvaluator(y_test, y_pred, mse)
+    metrics = evaluator.basic_report()
+    #metrics = evaluator.full_report()
+    wandb.log(metrics)
 
-# compute metrics
-evaluator = ModelEvaluator(y_test, y_pred, mse)
-metrics = evaluator.basic_report()
-#metrics = evaluator.full_report()
-wandb.log(metrics)
+full_evaluation(mse, threshold1)
+full_evaluation(mse, threshold2)
+full_evaluation(mse, threshold3)
+full_evaluation(mse, threshold4)
+full_evaluation(mse, threshold5)
 
 # Save and upload the model
 # wandb.save("model.pth")
