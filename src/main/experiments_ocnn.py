@@ -51,7 +51,7 @@ for batch_size in batch_size_all:
 
             # Initialize a new run
             if Config.USE_WANDB:
-                wandb.init(project="dl-anomaly-ocnn", entity="hasan-evci", config={
+                wandb.init(project="dl-anomaly-ocnn", entity="hasan-evci", name="bs"+str(batch_size)+"_hs"+str(hidden_layer_size)+"_nu"+str(nu), config={
                     "random_seed": Config.RANDOM_SEED,
                     "validate_size": Config.VALIDATE_SIZE,
                     "batch_size": batch_size,
