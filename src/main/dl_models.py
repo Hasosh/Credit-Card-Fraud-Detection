@@ -126,3 +126,26 @@ class CustomVAE(nn.Module):
         mu, log_var = self.encode(x)
         z = self.reparameterize(mu, log_var)
         return self.decode(z), mu, log_var
+
+
+class OneClassNN(nn.Module):
+    def __init__(self, input_dim, hidden_layer_size, activation_func=nn.Sigmoid):
+        """
+        Initialize the One Class Neural Network.
+        :param input_dim: The number of input features.
+        :param hidden_layer_size: The number of neurons in the hidden layer.
+        :param activation_func: The activation function to use in the hidden layer.
+        """
+        super(OneClassNN, self).__init__()
+        self.dense_out1 = nn.Linear(input_dim, hidden_layer_size)
+        self.out2 = nn.Linear(hidden_layer_size, 1)
+        self.activation_func = activation_func()
+
+    def forward(self, x):
+        """
+        Forward pass of the network.
+        :param x: Input tensor.
+        :return: Output tensor after passing through the network.
+        """
+        x = self.activation_func(self.dense_out1(x))
+        return self.out2(x)

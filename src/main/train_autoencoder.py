@@ -1,4 +1,3 @@
-# train.py
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -44,7 +43,7 @@ if Config.USE_WANDB:
         "patience": Config.PATIENCE,
         "min_delta": Config.MIN_DELTA,
         "loss_function": Config.LOSS_FUNCTION,
-        "plot_clipping_value": Config.PLOT_CLIPPING_VALUE,
+        "plot_clipping_value": Config.PLOT_CLIPPING_VALUE
     })
 
 
