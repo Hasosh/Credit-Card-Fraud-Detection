@@ -39,7 +39,7 @@ class ModelEvaluator:
             "mcc": mcc
         }
 
-    def plot_confusion_matrix(self):
+    def plot_confusion_matrix(self, save_img=False):
         cm = confusion_matrix(self.y_true, self.y_pred)
 
         # Reorder the confusion matrix
@@ -51,9 +51,11 @@ class ModelEvaluator:
         plt.title('Confusion Matrix')
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
+        if save_img:
+            plt.savefig("confusion_matrix.png")
         plt.show()
 
-    def plot_roc_curve(self):
+    def plot_roc_curve(self, save_img=False):
         fpr, tpr, _ = roc_curve(self.y_true, self.y_scores)
         roc_auc = auc(fpr, tpr)
 
@@ -64,9 +66,11 @@ class ModelEvaluator:
         plt.ylabel('True Positive Rate')
         plt.title('Receiver Operating Characteristic')
         plt.legend(loc="lower right")
+        if save_img:
+            plt.savefig("roc_curve.png")
         plt.show()
 
-    def plot_precision_recall_curve(self):
+    def plot_precision_recall_curve(self, save_img=False):
         precision, recall, _ = precision_recall_curve(self.y_true, self.y_scores)
         pr_auc = auc(recall, precision)
 
@@ -76,14 +80,16 @@ class ModelEvaluator:
         plt.ylabel('Precision')
         plt.title('Precision-Recall curve')
         plt.legend(loc="upper right")
+        if save_img:
+            plt.savefig("pr_curve.png")
         plt.show()
 
-    def full_report(self):
+    def full_report(self, save_img=False):
         metrics = self.basic_report()
-        self.plot_confusion_matrix()
+        self.plot_confusion_matrix(save_img)
         if self.y_scores is not None:
-            self.plot_roc_curve()
-            self.plot_precision_recall_curve()
+            self.plot_roc_curve(save_img)
+            self.plot_precision_recall_curve(save_img)
         print(classification_report(self.y_true, self.y_pred))
 
         return metrics
