@@ -3,17 +3,18 @@ class Config:
     RANDOM_SEED = 0
     VALIDATE_SIZE = 0.2
     BATCH_SIZE = 256 # 128 / 256
-    EPOCHS = 100
+    EPOCHS = 10
     LEARNING_RATE = 0.001
-    MODEL_TYPE = 'Autoencoder'  # Options: 'Autoencoder', 'DenoisingAE'
-    NUM_LAYERS = 6  # Total number of layers in Autoencoder (must be even number!) 4 / 6 / 8
-    BOTTLENECK_SIZE = 4 # 2 4 6 8 10
+    MODEL_TYPE = 'CustomVAE'  # Options: 'Autoencoder', 'DenoisingAE', 'CustomAE', 'CustomDAE', 'CustomVAE'
+    NUM_LAYERS = 4  # Total number of layers in Autoencoder (must be even number!) 4 / 6 / 8
+    BOTTLENECK_SIZE = 1 # 2 4 6 8 10
     ACTIVATION_FUNC = 'ELU'  # Options: 'ReLU', 'ELU', 'Tanh'
     PATIENCE = 10
-    MIN_DELTA = 0.001 # 0.01 / 0.001
+    MIN_DELTA = 0.01 # 0.01 / 0.001
     LOSS_FUNCTION = 'MSE'  # Options: 'BCE', 'MSE'
     PLOT_CLIPPING_VALUE = 6 # Good Options: 0.05 (BCE) or 10 (MSE)
     NOISE_FACTOR = 0.5 # For DenoisingAE
+    USE_WANDB = False
 
 """
 autoencoders:

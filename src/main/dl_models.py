@@ -11,38 +11,118 @@ class Autoencoder(nn.Module):
         def next_power_of_two(x):
             return 2 ** math.ceil(math.log2(x))
 
-        layers = []
-        current_dim = input_dim
+        encoder_layers = []
+        layer_dimensions = [input_dim]  # Store the input dimension
 
         # Construct the encoder
+        current_dim = input_dim
         for i in range(num_layers // 2 - 1):
-            next_dim = next_power_of_two(current_dim // 2)  # Calculate the next power of two
-            layers.append(nn.Linear(current_dim, next_dim))
-            layers.append(activation_func())
+            next_dim = next_power_of_two(current_dim // 2)
+            encoder_layers.append(nn.Linear(current_dim, next_dim))
+            encoder_layers.append(activation_func())
+            layer_dimensions.append(next_dim)
             current_dim = next_dim
 
         # Bottleneck layer
-        layers.append(nn.Linear(current_dim, bottleneck_size))
-        layers.append(activation_func())
+        bottleneck_layer = nn.Linear(current_dim, bottleneck_size)
+        encoder_layers.append(bottleneck_layer)
+        encoder_layers.append(activation_func())
+        layer_dimensions.append(bottleneck_size)
 
-        self.encoder = nn.Sequential(*layers)
+        self.encoder = nn.Sequential(*encoder_layers)
 
-        layers = []
-
-        # Construct the decoder
+        # Construct the decoder using the reverse of the encoder dimensions
+        decoder_layers = []
+        layer_dimensions = layer_dimensions[:-1]  # Exclude bottleneck size
         current_dim = bottleneck_size
-        for i in range(num_layers // 2 - 1):
-            next_dim = next_power_of_two(current_dim * 2)  # Calculate the next power of two
-            layers.append(nn.Linear(current_dim, min(next_dim, input_dim)))  # Ensure dimension does not exceed input_dim
-            layers.append(activation_func())
-            current_dim = next_dim
+        for prev_dim in reversed(layer_dimensions):
+            decoder_layers.append(nn.Linear(current_dim, prev_dim))
+            decoder_layers.append(activation_func())
+            current_dim = prev_dim
 
-        layers.append(nn.Linear(current_dim, input_dim))
-        layers.append(activation_func())
-
-        self.decoder = nn.Sequential(*layers)
+        self.decoder = nn.Sequential(*decoder_layers)
 
     def forward(self, x):
         x = self.encoder(x)
         x = self.decoder(x)
         return x
+
+
+class CustomAE(nn.Module):
+    def __init__(self, input_dim):
+        super(CustomAE, self).__init__()
+        # Encoder
+        self.encoder = nn.Sequential(
+            nn.Linear(input_dim, 16),
+            nn.BatchNorm1d(16),
+            nn.ELU(),
+            nn.Linear(16, 8),
+            nn.BatchNorm1d(8),
+            nn.ELU(),
+            nn.Linear(8, 4),
+            nn.BatchNorm1d(4),
+            nn.ELU(),
+        )
+        # Decoder
+        self.decoder = nn.Sequential(
+            nn.Linear(4, 8),
+            nn.BatchNorm1d(8),
+            nn.ELU(),
+            nn.Linear(8, 16),
+            nn.BatchNorm1d(16),
+            nn.ELU(),
+            nn.Linear(16, input_dim),
+            nn.ELU()
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
+
+class CustomVAE(nn.Module):
+    def __init__(self, input_dim):
+        super(CustomVAE, self).__init__()
+        # Encoder
+        self.encoder = nn.Sequential(
+            nn.Linear(input_dim, 16),
+            nn.BatchNorm1d(16),  # Batch normalization layer
+            nn.ELU(),
+            nn.Linear(16, 8),
+            nn.BatchNorm1d(8),   # Batch normalization layer
+            nn.ELU()
+        )
+        
+        self.mean_layer = nn.Linear(8, 4)  # Mean of the latent space
+        self.logvar_layer = nn.Linear(8, 4)  # Standard deviation of the latent space
+
+        # Decoder
+        self.decoder = nn.Sequential(
+            nn.Linear(4, 8),
+            nn.BatchNorm1d(8),   # Batch normalization layer
+            nn.ELU(),
+            nn.Linear(8, 16),
+            nn.BatchNorm1d(16),  # Batch normalization layer
+            nn.ELU(),
+            nn.Linear(16, input_dim),
+            nn.ELU()  # or nn.Sigmoid()
+        )
+
+    def encode(self, x):
+        x = self.encoder(x)
+        mean, logvar = self.mean_layer(x), self.logvar_layer(x)
+        return mean, logvar
+
+    def reparameterize(self, mu, log_var):
+        std = torch.exp(0.5*log_var)
+        eps = torch.randn_like(std)
+        return mu + eps*std
+
+    def decode(self, z):
+        return self.decoder(z)
+
+    def forward(self, x):
+        mu, log_var = self.encode(x)
+        z = self.reparameterize(mu, log_var)
+        return self.decode(z), mu, log_var
