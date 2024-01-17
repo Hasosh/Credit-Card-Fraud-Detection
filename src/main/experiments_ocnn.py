@@ -204,7 +204,7 @@ for batch_size in batch_size_all:
             ax.set_ylabel('Frequency')
             ax.set_title('Histogram of Decision Scores')
             ax.legend()
-            plt.show()
+            # plt.show()
 
             # Log the plot to wandb
             if Config.USE_WANDB:
@@ -219,6 +219,12 @@ for batch_size in batch_size_all:
 
             # compute metrics
             evaluator = ModelEvaluator(y_test, y_pred, -test_scores)
-            metrics = evaluator.full_report()
+            metrics = evaluator.basic_report()
             if Config.USE_WANDB:
                 wandb.log(metrics)
+
+            # Save and upload the model
+            # wandb.save("ocnn_model.pth")
+
+            # Finish the run
+            wandb.finish()
