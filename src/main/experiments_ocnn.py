@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import f1_score
 from evaluation import ModelEvaluator
 import wandb
 
@@ -188,9 +187,6 @@ for batch_size in batch_size_all:
             with torch.no_grad():
                 test_scores = model(X_test_tensor).cpu().numpy()
             test_scores = np.reshape(test_scores, -1)
-
-            import matplotlib.pyplot as plt
-            import numpy as np
 
             # Histogram of decision scores
             normal_scores = test_scores[y_test == 0]

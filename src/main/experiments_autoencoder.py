@@ -1,9 +1,8 @@
-# train.py
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from config import Config
-from dl_models import Autoencoder #, VariationalAutoencoder 
+from dl_models import Autoencoder
 from data_loader import MyDataLoader
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
@@ -30,6 +29,16 @@ for batch_size in batch_size_all:
                 if num_layers == 8:
                     if bottleneck_size > 2:
                         continue
+
+                if batch_size==128 and bottleneck_size==2:
+                    continue
+                if batch_size==128 and bottleneck_size==3 and activation_func=='ELU':
+                    continue
+
+                print("Using batch size: ", batch_size)
+                print("Using num layers: ", num_layers)
+                print("Using bottleneck_size: ", bottleneck_size)
+                print("Using activation_func: ", activation_func)
 
                 # Initialize a new run
                 wandb.init(project="dl-lab", entity="hasan-evci", name=str(batch_size)+"_"+str(num_layers)+"_"+str(bottleneck_size)+"_"+str(activation_func), config={
@@ -88,13 +97,11 @@ for batch_size in batch_size_all:
                 val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size)
 
                 # Create model
-                if Config.MODEL_TYPE == 'Autoencoder' or Config.MODEL_TYPE == 'DenoisingAE':
-                    model = Autoencoder(input_dim=X_train_.shape[1],
-                                        num_layers=num_layers,
-                                        bottleneck_size=bottleneck_size,
-                                        activation_func=getattr(nn, activation_func))
-                elif Config.MODEL_TYPE == 'VariationalAutoencoder':
-                    pass # model = VariationalAutoencoder()
+                model = Autoencoder(input_dim=X_train_.shape[1],
+                                    num_layers=num_layers,
+                                    bottleneck_size=bottleneck_size,
+                                    activation_func=getattr(nn, activation_func))
+
                 print(model)
 
                 # using GPU

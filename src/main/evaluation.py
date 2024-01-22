@@ -25,19 +25,32 @@ class ModelEvaluator:
         recall = recall_score(self.y_true, self.y_pred)
         f1 = f1_score(self.y_true, self.y_pred)
         mcc = matthews_corrcoef(self.y_true, self.y_pred)
+        if self.y_scores is not None:
+            auc = roc_auc_score(self.y_true, self.y_scores)
 
         print("Basic Evaluation Metrics:")
         print(f"Precision: {precision}")
         print(f"Recall: {recall}")
         print(f"F1-Score: {f1}")
         print(f"MCC: {mcc}")
+        if self.y_scores is not None:
+            print(f"AUC: {auc}")
 
-        return {
-            "precision": precision,
-            "recall": recall,
-            "f1_score": f1,
-            "mcc": mcc
-        }
+        if self.y_scores is not None:
+            return {
+                "precision": precision,
+                "recall": recall,
+                "f1_score": f1,
+                "mcc": mcc,
+                "auc": auc
+            }
+        else:
+            return {
+                "precision": precision,
+                "recall": recall,
+                "f1_score": f1,
+                "mcc": mcc
+            }
 
     def plot_confusion_matrix(self, save_img=False):
         cm = confusion_matrix(self.y_true, self.y_pred)
