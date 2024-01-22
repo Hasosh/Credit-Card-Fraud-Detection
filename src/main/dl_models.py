@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import math
 
+
 class Autoencoder(nn.Module):
     def __init__(self, input_dim, num_layers, bottleneck_size, activation_func=nn.ELU):
         super(Autoencoder, self).__init__()
@@ -57,17 +58,36 @@ class CustomAE(nn.Module):
             nn.BatchNorm1d(16),
             nn.ELU(),
             nn.Linear(16, 8),
-            nn.BatchNorm1d(8),
+            nn.ELU()
+        )
+        # Decoder
+        self.decoder = nn.Sequential(
+            nn.Linear(8, 16),
+            nn.BatchNorm1d(16),
             nn.ELU(),
-            nn.Linear(8, 4),
-            nn.BatchNorm1d(4),
+            nn.Linear(16, input_dim),
+            nn.ELU()
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+    
+
+class CustomDAE(nn.Module):
+    def __init__(self, input_dim):
+        super(CustomAE, self).__init__()
+        # Encoder
+        self.encoder = nn.Sequential(
+            nn.Linear(input_dim, 16),
+            nn.BatchNorm1d(16),
+            nn.ELU(),
+            nn.Linear(16, 8),
             nn.ELU(),
         )
         # Decoder
         self.decoder = nn.Sequential(
-            nn.Linear(4, 8),
-            nn.BatchNorm1d(8),
-            nn.ELU(),
             nn.Linear(8, 16),
             nn.BatchNorm1d(16),
             nn.ELU(),
@@ -88,20 +108,14 @@ class CustomVAE(nn.Module):
         self.encoder = nn.Sequential(
             nn.Linear(input_dim, 16),
             nn.BatchNorm1d(16),  # Batch normalization layer
-            nn.ELU(),
-            nn.Linear(16, 8),
-            nn.BatchNorm1d(8),   # Batch normalization layer
             nn.ELU()
         )
         
-        self.mean_layer = nn.Linear(8, 4)  # Mean of the latent space
-        self.logvar_layer = nn.Linear(8, 4)  # Standard deviation of the latent space
+        self.mean_layer = nn.Linear(16, 8)  # Mean of the latent space
+        self.logvar_layer = nn.Linear(16, 8)  # Standard deviation of the latent space
 
         # Decoder
         self.decoder = nn.Sequential(
-            nn.Linear(4, 8),
-            nn.BatchNorm1d(8),   # Batch normalization layer
-            nn.ELU(),
             nn.Linear(8, 16),
             nn.BatchNorm1d(16),  # Batch normalization layer
             nn.ELU(),
@@ -126,6 +140,52 @@ class CustomVAE(nn.Module):
         mu, log_var = self.encode(x)
         z = self.reparameterize(mu, log_var)
         return self.decode(z), mu, log_var
+
+# class CustomVAE(nn.Module):
+#     def __init__(self, input_dim):
+#         super(CustomVAE, self).__init__()
+#         # Encoder
+#         self.encoder = nn.Sequential(
+#             nn.Linear(input_dim, 16),
+#             nn.BatchNorm1d(16),  # Batch normalization layer
+#             nn.ELU(),
+#             nn.Linear(16, 8),
+#             nn.BatchNorm1d(8),   # Batch normalization layer
+#             nn.ELU()
+#         )
+        
+#         self.mean_layer = nn.Linear(8, 4)  # Mean of the latent space
+#         self.logvar_layer = nn.Linear(8, 4)  # Standard deviation of the latent space
+
+#         # Decoder
+#         self.decoder = nn.Sequential(
+#             nn.Linear(4, 8),
+#             nn.BatchNorm1d(8),   # Batch normalization layer
+#             nn.ELU(),
+#             nn.Linear(8, 16),
+#             nn.BatchNorm1d(16),  # Batch normalization layer
+#             nn.ELU(),
+#             nn.Linear(16, input_dim),
+#             nn.ELU()  # or nn.Sigmoid()
+#         )
+
+#     def encode(self, x):
+#         x = self.encoder(x)
+#         mean, logvar = self.mean_layer(x), self.logvar_layer(x)
+#         return mean, logvar
+
+#     def reparameterize(self, mu, log_var):
+#         std = torch.exp(0.5*log_var)
+#         eps = torch.randn_like(std)
+#         return mu + eps*std
+
+#     def decode(self, z):
+#         return self.decoder(z)
+
+#     def forward(self, x):
+#         mu, log_var = self.encode(x)
+#         z = self.reparameterize(mu, log_var)
+#         return self.decode(z), mu, log_var
 
 
 class OneClassNN(nn.Module):

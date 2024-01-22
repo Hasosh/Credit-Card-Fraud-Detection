@@ -3,8 +3,10 @@ import numpy as np
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.svm import OneClassSVM
 from sklearn.linear_model import SGDOneClassSVM
-from sklearn.neighbors import NearestNeighbors, LocalOutlierFactor
+from sklearn.neighbors import NearestNeighbors, LocalOutlierFactor, KernelDensity
 from sklearn.ensemble import IsolationForest
+from scipy.spatial import distance
+from sklearn.mixture import GaussianMixture
 
 class NaiveBaseline:
     def predict(self, X):
@@ -53,8 +55,8 @@ class OCSVM:
 
 
 class SGDOCSVM:
-    def __init__(self):
-        self.model = SGDOneClassSVM()
+    def __init__(self, random_state=0):
+        self.model = SGDOneClassSVM(random_state=random_state)
 
     def fit(self, X):
         self.model.fit(X)
@@ -89,6 +91,12 @@ class LOFAnomalyDetector:
     def __init__(self, n_neighbors=20, contamination='auto'):
         self.model = LocalOutlierFactor(n_neighbors=n_neighbors, contamination=contamination)
 
+    def fit(self, X):
+        self.model.fit(X)
+
+    def predict(self, X):
+        return self.model.predict(X)
+
     def fit_predict(self, X):
         return self.model.fit_predict(X)
 
@@ -106,4 +114,64 @@ class IsolationForestDetector:
     
     def anomaly_scores(self, X):
         return self.model.score_samples(X)
+    
+class MahalanobisAnomalyDetector:
+    def __init__(self):
+        self.mean = None
+        self.cov_inv = None
+        self.threshold = None
 
+    def fit(self, X):
+        # Calculate the mean and inverse covariance of the training data
+        self.mean = np.mean(X, axis=0)
+        cov = np.cov(X.T)
+        self.cov_inv = np.linalg.inv(cov)
+
+    def compute_threshold(self, X, percentile=95):
+        # Calculate Mahalanobis distance for the training set
+        distances = [distance.mahalanobis(x, self.mean, self.cov_inv) for x in X]
+        self.threshold = np.percentile(distances, percentile)
+
+    def predict(self, X):
+        # Calculate Mahalanobis distance for the test set
+        distances = [distance.mahalanobis(x, self.mean, self.cov_inv) for x in X]
+        # Predict anomalies based on the threshold
+        y_pred = (distances > self.threshold).astype(int)
+        return y_pred, distances
+
+class GMMAnomalyDetector:
+    def __init__(self, n_components=3, random_state=0):
+        self.n_components = n_components
+        self.model = GaussianMixture(n_components=n_components, random_state=random_state)
+        self.threshold = None
+
+    def fit(self, X):
+        self.model.fit(X)
+
+    def compute_threshold(self, X, std_multiplier=3):
+        log_likelihood = self.model.score_samples(X)
+        self.threshold = np.mean(log_likelihood) - std_multiplier * np.std(log_likelihood)
+
+    def predict(self, X):
+        log_likelihood = self.model.score_samples(X)
+        y_pred = (log_likelihood < self.threshold).astype(int)
+        return y_pred, log_likelihood
+
+class KDEAnomalyDetector:
+    def __init__(self, kernel='gaussian', bandwidth=0.5):
+        self.kernel = kernel
+        self.bandwidth = bandwidth
+        self.model = KernelDensity(kernel=kernel, bandwidth=bandwidth)
+        self.threshold = None
+
+    def fit(self, X):
+        self.model.fit(X)
+
+    def compute_threshold(self, X, std_multiplier=3):
+        log_density = self.model.score_samples(X)
+        self.threshold = np.mean(log_density) - std_multiplier * np.std(log_density)
+
+    def predict(self, X):
+        log_density = self.model.score_samples(X)
+        y_pred = (log_density < self.threshold).astype(int)
+        return y_pred, log_density
