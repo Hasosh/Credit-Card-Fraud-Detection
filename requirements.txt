@@ -2,7 +2,9 @@ torch
 scikit-learn
 numpy
 pandas
+scipy
 wandb
 matplotlib
 seaborn
 wandb
+shap
