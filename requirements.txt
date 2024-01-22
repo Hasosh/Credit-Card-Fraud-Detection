@@ -1,0 +1,8 @@
+torch
+scikit-learn
+numpy
+pandas
+wandb
+matplotlib
+seaborn
+wandb
