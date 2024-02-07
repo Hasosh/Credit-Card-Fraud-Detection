@@ -1,4 +1,9 @@
+ipython
+ipykernel
+ipywidgets
 torch
+torchvision
+torchaudio
 scikit-learn
 numpy
 pandas
