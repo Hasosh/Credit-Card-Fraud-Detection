@@ -33,7 +33,7 @@ Completely unsupervised, your training data will contain **only** normal data.
 
 ## Code
 
-This project includes steps for data loading, exploratory data analysis (EDA), and shallow and deep learning models for fraud detection.
+This project includes steps for data loading, exploratory data analysis (EDA), and shallow and deep learning model training for fraud detection.
 
 ### Quickstart
 
@@ -41,11 +41,37 @@ This is a quick and easy guide to run our code.
 
 #### Requirements
 
-First, you have to install all the needed packages.
-You can do this by typing the following command in your terminal:
+To run the project, you need to have Python 3.9 or higher installed. To install the required packages, you can type in the following command in your terminal:
+
+```
+pip install -r requirements.txt
+```
+
+For GPU acceleration within the PyTorch framework, it's necessary to install CUDA tailored for PyTorch. To enable this feature, please follow the instructions provided [here](https://pytorch.org/get-started/locally/).
+
+#### Running experiments
+
+Before running experiments, you should first specify the hyperparameters in the `config.py` file which can be found in the `src/main` folder. Examples: 
+- to specify which data to use, configure the `DATA_PATH` parameter.
+- if you want to run autoencoder experiments, you have to specify the type of autoencoder, e.g. `'Autoencoder'`, `'DenoisingAE'`. For custom architectures (that you can modify in the `dl_models.py` script), you can use `'CustomAE'`, `'CustomDAE'`, `'CustomVAE'`.
+- if you do not want to create runs on wandb, you should set `USE_WAND=False`.
+
+There are different scripts to run experiments (for different purposes):
+- `train_autoencoder.py` (training one autoencoder architecture, i.e. AE, DAE, VAE)
+- `train_ocnn.py` (training one OC-NN)
+- `kfold_autoencoder.py` (k-fold cross-validation for autoencoder and reporting macro-averaged results)
+- `kfold_ocnn.py` (k-fold cross-validation for OC-NN and reporting macro-averaged results)
+- `experiments_autoencoder.py` (our conducted experiments for the autoencoder)
+- `experiments_ocnn.py` (our conducted experiments for the OC-NN)
+
+To run one of these scripts, you can simply type in the command:
+
+```
+python src/main/[SCRIPT_NAME]
+```
 
 ## Further Reading
-Here you can find our [written report]() and our [final presentation]().
+Here you can find our [written report](https://github.com/Hasosh/Credit-Card-Fraud-Detection/blob/master/doc/paper.pdf) and our [final presentation](https://github.com/Hasosh/Credit-Card-Fraud-Detection/blob/master/doc/presentation.pdf).
 
 ## Credits
 We are Hasan Evci and Tareq Abu El Komboz, M.Sc. Computer Science students at the University of Stuttgart.
