@@ -17,6 +17,26 @@ The objective is to identify fraudulent transactions, which are typically rare b
 Using deep learning to automate fraud detection can vastly reduce the manual labor involved, and potentially save millions of dollars in fraud losses. 
 The dataset for this project comprises various transaction attributes.
 
+.
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── config          # Configuration files for training
+├── data            
+│   └── runs        # Artifacts created during learning
+├── doc             # Some documentation, presentations, etc.            
+├── scripts         # Helper scripts
+├── src             # Source code
+│   ├── main.py     # Main Script
+│   ├── curriculum  # Curriculum Learning Implementation
+│   ├── data        # Data Handling and Generation
+│   ├── experiments # Experiment Implementations
+│   ├── loss        # Loss Implementations
+│   ├── models      # Model Implementations
+│   └── utils       # Utility Functions
+└── tmp             # Temporary Files
+
+
 ## Dataset
 
 The [Kaggle: Credit Card Fraud Detection Dataset 2023](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023/data) features over 550,000 European credit card transactions, aimed at binary classification to identify fraudulent activities. 
