@@ -21,6 +21,15 @@ Completely unsupervised, your training data will contain **only** normal data.
 
 This project includes steps for data loading, exploratory data analysis (EDA), and shallow and deep learning models for fraud detection.
 
+### Quickstart
+
+This is a quick and easy guide to run our code.
+
+#### Requirements
+
+First, you have to install all the needed packages.
+You can do this by typing the following comman in your terminal:
+
 ## References
 - [Lukas Ruff, Jacob R. Kauffmann, Robert A. Vandermeulen, Grégoire Montavon, Wojciech Samek, Marius Kloft,
 Thomas G. Dietterich, and Klaus-Robert Müller. A unifying review of deep and shallow anomaly detection. Proc.
