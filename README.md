@@ -42,26 +42,25 @@ This project includes steps for data loading, exploratory data analysis (EDA), a
 ├── README.md
 ├── requirements.txt
 ├── data            		# Dataset used for training and evaluation
-├── doc             		# Additional documents 
-│	├── paper.pdf     		# Written report
-│	├── presentation.pdf	# Final presentation
+├── doc             		# Additional documents (Written report, Final presentation) 
+│	├── paper.pdf     	
+│	├── presentation.pdf	
 ├── img             		# Images of experiments and results
 ├── model_saves          	# Weights for our best Deep Learning models
 ├── notebooks       		# Helper notebooks
 ├── src/main           		# Source code
-	├── auxilary.ipynb										# 
-	├── config.py  											# 
-	├── data_loader.py        								# Data Handling and Generation
-	├── dl_models.py 										# Experiment Implementations
-	├── evaluation.py        								# Loss Implementations
-	├── experiments_autoencoder.py      					# Model Implementations
-	├── experiments_ocnn.py     							# 
-	├── functionality_and_baseline_model_training.ipynb  	# Curriculum Learning Implementation
-	├── kfold_ocnn.py        								# Data Handling and Generation
-	├── models.py 											# Experiment Implementations
-	├── train_autoencoder.py        						# Loss Implementations
-	├── train_ocnn.py      									# Model Implementations
-	└── utils.py       										# Utility Functions
+	├── config.py  						
+	├── data_loader.py        				
+	├── dl_models.py 					
+	├── evaluation.py        				
+	├── experiments_autoencoder.py      			 
+	├── experiments_ocnn.py     				 
+	├── functionality_and_baseline_model_training.ipynb  	 
+	├── kfold_ocnn.py        				 
+	├── models.py 						 
+	├── train_autoencoder.py        			 
+	├── train_ocnn.py      					 
+	└── utils.py
 ```
 
 ### Quickstart
