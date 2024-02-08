@@ -35,6 +35,35 @@ Completely unsupervised, your training data will contain **only** normal data.
 
 This project includes steps for data loading, exploratory data analysis (EDA), and shallow and deep learning model training for fraud detection.
 
+### Project Structure
+
+```bash
+.
+├── README.md
+├── requirements.txt
+├── data            		# Dataset used for training and evaluation
+├── doc             		# Additional documents 
+│	├── paper.pdf     		# Written report
+│	├── presentation.pdf	# Final presentation
+├── img             		# Images of experiments and results
+├── model_saves          	# Weights for our best Deep Learning models
+├── notebooks       		# Helper notebooks
+├── src/main           		# Source code
+	├── auxilary.ipynb										# 
+	├── config.py  											# 
+	├── data_loader.py        								# Data Handling and Generation
+	├── dl_models.py 										# Experiment Implementations
+	├── evaluation.py        								# Loss Implementations
+	├── experiments_autoencoder.py      					# Model Implementations
+	├── experiments_ocnn.py     							# 
+	├── functionality_and_baseline_model_training.ipynb  	# Curriculum Learning Implementation
+	├── kfold_ocnn.py        								# Data Handling and Generation
+	├── models.py 											# Experiment Implementations
+	├── train_autoencoder.py        						# Loss Implementations
+	├── train_ocnn.py      									# Model Implementations
+	└── utils.py       										# Utility Functions
+```
+
 ### Quickstart
 
 This is a quick and easy guide to run our code.
