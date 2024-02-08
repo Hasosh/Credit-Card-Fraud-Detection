@@ -7,13 +7,22 @@
 4. Further Reading
 5. References
 
+## Overview
+
+This is part of the module "Laboratory Course Artificial Intelligence: Deep Learning Lab 2023/2024".
+Thanks to our supervisor [Rodrigo](https://github.com/RodrigoLPA) for his support!
+
 ## Project Description
 
-This project aims to tackle credit card fraud by implementing anomaly detection techniques on tabular data. 
+In this project, we aim to tackle credit card fraud by implementing anomaly detection techniques on tabular data. 
 The objective is to identify fraudulent transactions, which are typically rare but hold significant financial implications. 
 Using deep learning to automate fraud detection can vastly reduce the manual labor involved, and potentially save millions of dollars in fraud losses. 
-The dataset for this project comprises various transaction attributes.
 
+This study reveals that deep learning models generally outperform traditional methods. 
+This suggests their greater efficacy, especially in dealing with the challenges posed by high-dimensional data. 
+The One Class Neural Network emerges as the most effective model, with significant proficiency in identifying fraudulent transactions
+Interestingly, traditional models like kNN distance and SGD OC-SVM show specific strengths in certain metrics, suggesting their continued relevance. 
+The similar performance of various autoencoder models suggests that data noise levels are low and that sophisticated models like DAEs and VAEs do not necessarily offer additional benefits in this context.
 
 ## Dataset
 
