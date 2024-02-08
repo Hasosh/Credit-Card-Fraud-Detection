@@ -113,7 +113,7 @@ Here you can find our [written report](https://github.com/Hasosh/Credit-Card-Fra
 
 ## Credits
 We are Hasan Evci and Tareq Abu El Komboz, M.Sc. Computer Science students at the University of Stuttgart.
-You can find us on [Hasans-Github](https://github.com/Hasosh), [Tareqs-Gihub](https://github.com/TareqKomboz) and [Hasans-LinkedIn](https://www.linkedin.com/in/hasan-evci-41089922b/) and [Tareqs-LinkedIn](https://www.linkedin.com/in/tareqkomboz/).
+You can find us on [Hasan's-Github](https://github.com/Hasosh), [Tareq's-Gihub](https://github.com/TareqKomboz) and [Hasan's-LinkedIn](https://www.linkedin.com/in/hasan-evci-41089922b/) and [Tareq's-LinkedIn](https://www.linkedin.com/in/tareqkomboz/).
 
 ## References
 - [Lukas Ruff, Jacob R. Kauffmann, Robert A. Vandermeulen, Grégoire Montavon, Wojciech Samek, Marius Kloft,
