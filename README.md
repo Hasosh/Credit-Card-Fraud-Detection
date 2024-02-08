@@ -21,13 +21,17 @@ The dataset for this project comprises various transaction attributes.
 
 Credit card fraud is a growing concern with the rise in digital transactions.
 The financial sector spends a significant amount of resources on fraud prevention and detection. 
-Automating this process using deep learning can significantly cut costs, improve accuracy, and speed up the fraud detection process. The impact of a successful implementation could be substantial, making transactions safer and saving financial institutions immense resources.
+Automating this process using deep learning can significantly cut costs, improve accuracy, and speed up the fraud detection process. 
+The impact of a successful implementation could be substantial, making transactions safer and saving financial institutions immense resources.
 
 ### Evaluation
 
-Evaluating anomaly detection models has unique challenges due to the imbalanced nature of the data. Fraudulent transactions are significantly outnumbered by genuine transactions, which makes it difficult for models to learn the characteristics of fraudulent behavior effectively. Moreover, traditional accuracy as a metric can be misleading since a model that predicts every transaction as genuine could still achieve high accuracy due to the data imbalance.
+Evaluating anomaly detection models has unique challenges due to the imbalanced nature of the data. 
+Fraudulent transactions are significantly outnumbered by genuine transactions, which makes it difficult for models to learn the characteristics of fraudulent behavior effectively. 
+Moreover, traditional accuracy as a metric can be misleading since a model that predicts every transaction as genuine could still achieve high accuracy due to the data imbalance.
 
-In this light, the evaluation of the project should focus on metrics better suited for imbalanced datasets and anomaly detection tasks. Here are some examples of such metrics:
+In this light, the evaluation of the project should focus on metrics better suited for imbalanced datasets and anomaly detection tasks. 
+Here are some examples of such metrics:
 
 - **Precision**: The ratio of correctly identified fraudulent transactions to the total identified as fraudulent. High precision indicates a lower false positive rate which is crucial to avoid alarming users unnecessarily.
 - **Recall**: The ratio of correctly identified fraudulent transactions to the total actual fraudulent transactions. High recall is important to catch as many fraudulent transactions as possible.
@@ -35,7 +39,10 @@ In this light, the evaluation of the project should focus on metrics better suit
 - **Area Under the Precision-Recall Curve (AUC-PR)**: Unlike AUC-ROC, AUC-PR is more informative when dealing with imbalanced datasets, as it focuses on the performance of the positive (minority) class.
 - **Matthews Correlation Coefficient (MCC)**: MCC is a balanced metric that takes into account true and false positives and negatives. It is a reliable indicator of the quality of binary classifications, especially useful in imbalanced datasets.
 
-The trade-off between precision and recall is pivotal in fraud detection. Aiming for high precision could result in missing some fraudulent transactions (lower recall), while aiming for high recall could result in many false positives (lower precision). The choice between focusing on precision or recall would depend on the specific costs associated with false positives and false negatives in the given financial context. For this project, you will decide what is an acceptable failure rate and justify it.
+The trade-off between precision and recall is pivotal in fraud detection. 
+Aiming for high precision could result in missing some fraudulent transactions (lower recall), while aiming for high recall could result in many false positives (lower precision). 
+The choice between focusing on precision or recall would depend on the specific costs associated with false positives and false negatives in the given financial context. 
+For this project, you will decide what is an acceptable failure rate and justify it.
 
 Baseline models should include simple statistical anomaly detection methods or basic machine learning models like logistic regression and One-Class SVMs.
 
