@@ -28,7 +28,10 @@ This is a quick and easy guide to run our code.
 #### Requirements
 
 First, you have to install all the needed packages.
-You can do this by typing the following comman in your terminal:
+You can do this by typing the following command in your terminal:
+
+## Further Reading
+Here you can find our [written report]() and our [final presentation]().
 
 ## References
 - [Lukas Ruff, Jacob R. Kauffmann, Robert A. Vandermeulen, Grégoire Montavon, Wojciech Samek, Marius Kloft,
