@@ -14,39 +14,6 @@ The objective is to identify fraudulent transactions, which are typically rare b
 Using deep learning to automate fraud detection can vastly reduce the manual labor involved, and potentially save millions of dollars in fraud losses. 
 The dataset for this project comprises various transaction attributes.
 
-├── LICENSE
-
-├── README.md
-
-├── requirements.txt
-
-├── config          # Configuration files for training
-
-├── data            
-
-│   └── runs        # Artifacts created during learning
-
-├── doc             # Some documentation, presentations, etc.  
-
-├── scripts         # Helper scripts
-
-├── src             # Source code
-
-│   ├── main.py     # Main Script
-
-│   ├── curriculum  # Curriculum Learning Implementation
-
-│   ├── data        # Data Handling and Generation
-
-│   ├── experiments # Experiment Implementations
-
-│   ├── loss        # Loss Implementations
-
-│   ├── models      # Model Implementations
-
-│   └── utils       # Utility Functions
-
-└── tmp             # Temporary Files
 
 ## Dataset
 
@@ -73,7 +40,7 @@ Here you can find our [written report]() and our [final presentation]().
 
 ## Credits
 We are Hasan Evci and Tareq Abu El Komboz, M.Sc. Computer Science students at the University of Stuttgart.
-You can find us on [Hasans-Github](https://github.com/Hasosh), [Tareqs-Gihub](https://github.com/TareqKomboz) and [Hasans-LinkedIn](https://www.linkedin.com/in/hasan-evci-41089922b/) and [Tareqs-LinkedIn](www.linkedin.com/in/tareqkomboz).
+You can find us on [Hasans-Github](https://github.com/Hasosh), [Tareqs-Gihub](https://github.com/TareqKomboz) and [Hasans-LinkedIn](https://www.linkedin.com/in/hasan-evci-41089922b/) and [Tareqs-LinkedIn](https://www.linkedin.com/in/tareqkomboz/).
 
 ## References
 - [Lukas Ruff, Jacob R. Kauffmann, Robert A. Vandermeulen, Grégoire Montavon, Wojciech Samek, Marius Kloft,
