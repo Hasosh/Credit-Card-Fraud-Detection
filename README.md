@@ -1,16 +1,14 @@
 # Credit Card Fraud Detection
 
+This is part of the module "Laboratory Course Artificial Intelligence: Deep Learning Lab 2023/2024".
+Thanks to our supervisor [Rodrigo](https://github.com/RodrigoLPA) for his support!
+
 ## Table of Contents
 1. Project Description
 2. Dataset
 3. Code
 4. Further Reading
 5. References
-
-## Overview
-
-This is part of the module "Laboratory Course Artificial Intelligence: Deep Learning Lab 2023/2024".
-Thanks to our supervisor [Rodrigo](https://github.com/RodrigoLPA) for his support!
 
 ## Project Description
 
