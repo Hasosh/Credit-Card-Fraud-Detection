@@ -1,5 +1,8 @@
 # Credit Card Fraud Detection
 
+## Authors
+We are Hasan Evci and Tareq Abu El Komboz, M.Sc. Computer Science students at the University of Stuttgart.
+
 ## Description
 
 This project aims to tackle credit card fraud by implementing anomaly detection techniques on tabular data. 
