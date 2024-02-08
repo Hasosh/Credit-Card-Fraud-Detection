@@ -1,14 +1,27 @@
 # Credit Card Fraud Detection
 
+## Abstract
+Improving algorithms for credit card fraud detection can save institutions and private persons tremendous amounts of money and is of huge importance. 
+In this work, we show that deep learning methods are superior to many traditional anomaly detection methods in the field of credit card fraud detection.
+Using the Credit Card Fraud Detection Dataset 2023 with over 550,000 credit card transactions, we found that nearly all proposed deep learning architectures achieved better metrics than traditional baselines, suggesting their greater efficacy for high-dimensional data. 
+The best-performing model overall is the one-class neural network with a macro-average F1-score of 93%, whereas the best-performing baseline model is the kNN distance method with a macro-average F1-score of 89%. 
+Interestingly, the kNN distance method slightly outperforms advanced variations of the autoencoder, indicating that simpler models can still be highly effective in certain scenarios, particularly in datasets where the distinction between normal and anomalous data is more pronounced. 
+This finding emphasizes the importance of considering both advanced and traditional approaches in fraud detection strategies.
+
 ## Overview
 
 ### Description
 
-This project aims to tackle credit card fraud by implementing anomaly detection techniques on tabular data. The objective is to identify fraudulent transactions, which are typically rare but hold significant financial implications. Using deep learning to automate fraud detection can vastly reduce the manual labor involved, and potentially save millions of dollars in fraud losses. The dataset for this project comprises various transaction attributes.
+This project aims to tackle credit card fraud by implementing anomaly detection techniques on tabular data. 
+The objective is to identify fraudulent transactions, which are typically rare but hold significant financial implications. 
+Using deep learning to automate fraud detection can vastly reduce the manual labor involved, and potentially save millions of dollars in fraud losses. 
+The dataset for this project comprises various transaction attributes.
 
 ### Motivation
 
-Credit card fraud is a growing concern with the rise in digital transactions. The financial sector spends a significant amount of resources on fraud prevention and detection. Automating this process using deep learning can significantly cut costs, improve accuracy, and speed up the fraud detection process. The impact of a successful implementation could be substantial, making transactions safer and saving financial institutions immense resources.
+Credit card fraud is a growing concern with the rise in digital transactions.
+The financial sector spends a significant amount of resources on fraud prevention and detection. 
+Automating this process using deep learning can significantly cut costs, improve accuracy, and speed up the fraud detection process. The impact of a successful implementation could be substantial, making transactions safer and saving financial institutions immense resources.
 
 ### Evaluation
 
@@ -41,18 +54,6 @@ You will work on a variation of the following dataset: [Kaggle: Credit Card Frau
 #### Case 1
 
 Completely unsupervised, your training data will contain **only** normal data.
-
-#### Case 2
-
-Your training data will be **contaminated** and **unlabeled**, which means that some anomalies will be present during training.
-
-#### Case 3
-
-Your training data will be **contaminated** and **labeled**, which means that some anomalies will be present during training, but you will know about them.
-
-#### Case 4
-
-Surprise.
 
 ## Code
 
