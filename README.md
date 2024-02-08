@@ -3,14 +3,21 @@
 ## Authors
 We are Hasan Evci and Tareq Abu El Komboz, M.Sc. Computer Science students at the University of Stuttgart.
 
-## Description
+## Table of Contents
+1. Project Description
+2. Dataset
+3. Code
+4. Further Reading
+5. References
+
+## Project Description
 
 This project aims to tackle credit card fraud by implementing anomaly detection techniques on tabular data. 
 The objective is to identify fraudulent transactions, which are typically rare but hold significant financial implications. 
 Using deep learning to automate fraud detection can vastly reduce the manual labor involved, and potentially save millions of dollars in fraud losses. 
 The dataset for this project comprises various transaction attributes.
 
-## Data
+## Dataset
 
 The [Kaggle: Credit Card Fraud Detection Dataset 2023](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023/data) features over 550,000 European credit card transactions, aimed at binary classification to identify fraudulent activities. 
 It includes a unique identifier and 28 anonymized features, which represent various transaction attributes like time and location, along with the transaction amount for each transaction.
