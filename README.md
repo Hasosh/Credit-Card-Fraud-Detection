@@ -31,6 +31,18 @@ It includes a unique identifier and 28 anonymized features, which represent vari
 For computational reasons, our study uses a modified version of this dataset with fewer samples.
 Completely unsupervised, your training data will contain **only** normal data.
 
+## Main Results
+
+Our main results are compactly presented in the following Table. 
+Every row corresponds to a different model and every column corresponds to one metric. 
+For each metric, we highlighted the model that performed best in bold font.
+The best-performing model is the DL model OC-NN, whereas the worst-performing is the Isolation Forest.
+The best baseline model is the Mahalanobis distance model.
+
+<figure>
+  <img src="https://github.com/Hasosh/Credit-Card-Fraud-Detection/blob/master/img/main_results.png" alt="Table of main results"/>
+</figure>
+
 ## Code
 
 This project includes steps for data loading, exploratory data analysis (EDA), and shallow and deep learning model training for fraud detection.
